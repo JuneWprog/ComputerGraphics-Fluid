@@ -147,7 +147,7 @@ export class FluidSimulator {
                         for (var j = first; j < last; j++) {
                             var id = this.cellParticleIds[j];
                             //if the particle is the same as the particle we are looking at
-                            if (id == i)
+                            if (id === i)
                                 continue;
                             var qx = this.particlePos[2 * id];
                             var qy = this.particlePos[2 * id + 1];
@@ -156,7 +156,7 @@ export class FluidSimulator {
                             var dy = qy - py;
                             var d2 = dx * dx + dy * dy;
                             //if the distance between the particles is greater than the minimum distance
-                            if (d2 > minDist2 || d2 == 0.0) 
+                            if (d2 > minDist2 || d2 === 0.0) 
                                 continue;
                             //d is the Euclidean distance between the particles 
                             var d = Math.sqrt(d2);
@@ -285,12 +285,12 @@ export class FluidSimulator {
             if (x0 < this.fNumX && y1 < this.fNumY) d[x0 * n + y1] += sx * ty;
         }
 
-        if (this.particleRestDensity == 0.0) {
+        if (this.particleRestDensity === 0.0) {
             var sum = 0.0;
             var numFluidCells = 0;
 
             for (var i = 0; i < this.fNumCells; i++) {
-                if (this.cellType[i] == FLUID_CELL) {
+                if (this.cellType[i] === FLUID_CELL) {
                     sum += d[i];
                     numFluidCells++;
                 }
@@ -303,7 +303,7 @@ export class FluidSimulator {
 // 			for (var xi = 1; xi < this.fNumX; xi++) {
 // 				for (var yi = 1; yi < this.fNumY; yi++) {
 // 					var cellNr = xi * n + yi;
-// 					if (this.cellType[cellNr] != FLUID_CELL)
+// 					if (this.cellType[cellNr] !== FLUID_CELL)
 // 						continue;
 // 					var hx = this.h;
 // 					var hy = this.h;
@@ -337,7 +337,7 @@ export class FluidSimulator {
             this.v.fill(0.0);
 
             for (var i = 0; i < this.fNumCells; i++) 
-                this.cellType[i] = this.s[i] == 0.0 ? SOLID_CELL : AIR_CELL;
+                this.cellType[i] = this.s[i] === 0.0 ? SOLID_CELL : AIR_CELL;
 
             for (var i = 0; i < this.numParticles; i++) {
                 var x = this.particlePos[2 * i];
@@ -345,19 +345,18 @@ export class FluidSimulator {
                 var xi = clamp(Math.floor(x * h1), 0, this.fNumX - 1);
                 var yi = clamp(Math.floor(y * h1), 0, this.fNumY - 1);
                 var cellNr = xi * n + yi;
-                if (this.cellType[cellNr] == AIR_CELL)
+                if (this.cellType[cellNr] === AIR_CELL)
                     this.cellType[cellNr] = FLUID_CELL;
             }
         }
-
         for (var component = 0; component < 2; component++) {
 
-            var dx = component == 0 ? 0.0 : h2;
-            var dy = component == 0 ? h2 : 0.0;
+            var dx = component === 0 ? 0.0 : h2;
+            var dy = component === 0 ? h2 : 0.0;
 
-            var f = component == 0 ? this.u : this.v;
-            var prevF = component == 0 ? this.prevU : this.prevV;
-            var d = component == 0 ? this.du : this.dv;
+            var f = component === 0 ? this.u : this.v;
+            var prevF = component === 0 ? this.prevU : this.prevV;
+            var d = component === 0 ? this.du : this.dv;
 
             for (var i = 0; i < this.numParticles; i++) {
                 var x = this.particlePos[2 * i];
@@ -395,11 +394,11 @@ export class FluidSimulator {
                     f[nr3] += pv * d3;  d[nr3] += d3;
                 }
                 else {
-                    var offset = component == 0 ? n : 1;
-                    var valid0 = this.cellType[nr0] != AIR_CELL || this.cellType[nr0 - offset] != AIR_CELL ? 1.0 : 0.0;
-                    var valid1 = this.cellType[nr1] != AIR_CELL || this.cellType[nr1 - offset] != AIR_CELL ? 1.0 : 0.0;
-                    var valid2 = this.cellType[nr2] != AIR_CELL || this.cellType[nr2 - offset] != AIR_CELL ? 1.0 : 0.0;
-                    var valid3 = this.cellType[nr3] != AIR_CELL || this.cellType[nr3 - offset] != AIR_CELL ? 1.0 : 0.0;
+                    var offset = component === 0 ? n : 1;
+                    var valid0 = this.cellType[nr0] !== AIR_CELL || this.cellType[nr0 - offset] !== AIR_CELL ? 1.0 : 0.0;
+                    var valid1 = this.cellType[nr1] !== AIR_CELL || this.cellType[nr1 - offset] !== AIR_CELL ? 1.0 : 0.0;
+                    var valid2 = this.cellType[nr2] !== AIR_CELL || this.cellType[nr2 - offset] !== AIR_CELL ? 1.0 : 0.0;
+                    var valid3 = this.cellType[nr3] !== AIR_CELL || this.cellType[nr3 - offset] !== AIR_CELL ? 1.0 : 0.0;
 
                     var v = this.particleVel[2 * i + component];
                     var d = valid0 * d0 + valid1 * d1 + valid2 * d2 + valid3 * d3;
@@ -426,10 +425,10 @@ export class FluidSimulator {
 
                 for (var i = 0; i < this.fNumX; i++) {
                     for (var j = 0; j < this.fNumY; j++) {
-                        var solid = this.cellType[i * n + j] == SOLID_CELL;
-                        if (solid || (i > 0 && this.cellType[(i - 1) * n + j] == SOLID_CELL))
+                        var solid = this.cellType[i * n + j] === SOLID_CELL;
+                        if (solid || (i > 0 && this.cellType[(i - 1) * n + j] === SOLID_CELL))
                             this.u[i * n + j] = this.prevU[i * n + j];
-                        if (solid || (j > 0 && this.cellType[i * n + j - 1] == SOLID_CELL))
+                        if (solid || (j > 0 && this.cellType[i * n + j - 1] === SOLID_CELL))
                             this.v[i * n + j] = this.prevV[i * n + j];
                     }
                 }
@@ -456,7 +455,7 @@ export class FluidSimulator {
             for (var i = 1; i < this.fNumX-1; i++) {
                 for (var j = 1; j < this.fNumY-1; j++) {
 
-                    if (this.cellType[i*n + j] != FLUID_CELL)
+                    if (this.cellType[i*n + j] !== FLUID_CELL)
                         continue;
 
                     var center = i * n + j;
@@ -471,7 +470,7 @@ export class FluidSimulator {
                     var sy0 = this.s[bottom];
                     var sy1 = this.s[top];
                     var s = sx0 + sx1 + sy0 + sy1;
-                    if (s == 0.0)
+                    if (s === 0.0)
                         continue;
 
                     var div = this.u[right] - this.u[center] + 
@@ -542,7 +541,7 @@ export class FluidSimulator {
     {
         val = Math.min(Math.max(val, minVal), maxVal- 0.0001);
         var d = maxVal - minVal;
-        val = d == 0.0 ? 0.5 : (val - minVal) / d;
+        val = d === 0.0 ? 0.5 : (val - minVal) / d;
         var m = 0.25;
         var num = Math.floor(val / m);
         var s = (val - num * m) / m;
@@ -553,6 +552,7 @@ export class FluidSimulator {
             case 1 : r = 0.0; g = 1.0; b = 1.0-s; break;
             case 2 : r = s; g = 1.0; b = 0.0; break;
             case 3 : r = 1.0; g = 1.0 - s; b = 0.0; break;
+            default: break;
         }
 
         this.cellColor[3 * cellNr] = r;
@@ -566,12 +566,12 @@ export class FluidSimulator {
 
         for (var i = 0; i < this.fNumCells; i++) {
 
-            if (this.cellType[i] == SOLID_CELL) {
+            if (this.cellType[i] === SOLID_CELL) {
                 this.cellColor[3*i] = 0.5;
                 this.cellColor[3*i + 1] = 0.5;
                 this.cellColor[3*i + 2] = 0.5;
             }
-            else if (this.cellType[i] == FLUID_CELL) {
+            else if (this.cellType[i] === FLUID_CELL) {
                 var d = this.particleDensity[i];
                 if (this.particleRestDensity > 0.0)
                     d /= this.particleRestDensity;

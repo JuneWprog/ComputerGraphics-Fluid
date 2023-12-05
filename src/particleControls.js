@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import {EARTH_GRAVITY}  from "./Constants";
-
+import React from "react";
 
 export default function ParticleControls({
   showParticles,
