@@ -1,6 +1,8 @@
+#version 300 es
 precision mediump float;
-varying vec3 fragColor;
-varying float fragDrawDisk;
+in vec3 fragColor;
+in float fragDrawDisk;
+out vec4 fragColorOut;
 
 void main() {
     if(fragDrawDisk == 1.0) {
@@ -10,5 +12,5 @@ void main() {
         if(r2 > 0.25)
             discard;
     }
-    gl_FragColor = vec4(fragColor, 1.0);
+    fragOutput = vec4(fragColor, 1.0);
 }

@@ -1,10 +1,10 @@
-attribute vec2 attrPosition;
+#version 300 es
+in vec2 attrPosition;
 uniform vec2 domainSize;
 uniform vec3 color;
 uniform vec2 translation;
 uniform float scale;
-
-varying vec3 fragColor;
+out vec3 fragColor;
 
 void main() {
     vec2 v = translation + attrPosition * scale;

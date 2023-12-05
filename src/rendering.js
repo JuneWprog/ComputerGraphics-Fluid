@@ -6,73 +6,143 @@ import { scene } from "./Scene.js";
 // import meshFragmentShader from "./shaders/meshFragmentShader.glsl";
 import { gl, canvas } from "./Canvas.js";
 
-const pointVertexShader = `
-		attribute vec2 attrPosition;
-		attribute vec3 attrColor;
-		uniform vec2 domainSize;
-		uniform float pointSize;
-		uniform float drawDisk;
 
-		varying vec3 fragColor;
-		varying float fragDrawDisk;
+//webgl1
+// const pointVertexShader = `
+// 		attribute vec2 attrPosition;
+// 		attribute vec3 attrColor;
+// 		uniform vec2 domainSize;
+// 		uniform float pointSize;
+// 		uniform float drawDisk;
 
-		void main() {
-		vec4 screenTransform = 
-			vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
-		gl_Position =
-			vec4(attrPosition * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
+// 		varying vec3 fragColor;
+// 		varying float fragDrawDisk;
 
-		gl_PointSize = pointSize;
-		fragColor = attrColor;
-		fragDrawDisk = drawDisk;
-		}
-	`;
+// 		void main() {
+// 		vec4 screenTransform = 
+// 			vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
+// 		gl_Position =
+// 			vec4(attrPosition * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
 
-	const pointFragmentShader = `
-		precision mediump float;
-		varying vec3 fragColor;
-		varying float fragDrawDisk;
+// 		gl_PointSize = pointSize;
+// 		fragColor = attrColor;
+// 		fragDrawDisk = drawDisk;
+// 		}
+// 	`;
 
-		void main() {
-			if (fragDrawDisk == 1.0) {
-				float rx = 0.5 - gl_PointCoord.x;
-				float ry = 0.5 - gl_PointCoord.y;
-				float r2 = rx * rx + ry * ry;
-				if (r2 > 0.25)
-					discard;
-			}
-			gl_FragColor = vec4(fragColor, 1.0);
-		}
-	`;
+// 	const pointFragmentShader = `
+// 		precision mediump float;
+// 		varying vec3 fragColor;
+// 		varying float fragDrawDisk;
 
-	const meshVertexShader = `
-		attribute vec2 attrPosition;
-		uniform vec2 domainSize;
-		uniform vec3 color;
-		uniform vec2 translation;
-		uniform float scale;
+// 		void main() {
+// 			if (fragDrawDisk == 1.0) {
+// 				float rx = 0.5 - gl_PointCoord.x;
+// 				float ry = 0.5 - gl_PointCoord.y;
+// 				float r2 = rx * rx + ry * ry;
+// 				if (r2 > 0.25)
+// 					discard;
+// 			}
+// 			gl_FragColor = vec4(fragColor, 1.0);
+// 		}
+// 	`;
 
-		varying vec3 fragColor;
+// 	const meshVertexShader = `
+// 		attribute vec2 attrPosition;
+// 		uniform vec2 domainSize;
+// 		uniform vec3 color;
+// 		uniform vec2 translation;
+// 		uniform float scale;
 
-		void main() {
-			vec2 v = translation + attrPosition * scale;
-		vec4 screenTransform = 
-			vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
-		gl_Position =
-			vec4(v * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
+// 		varying vec3 fragColor;
 
-		fragColor = color;
-		}
-	`;
+// 		void main() {
+// 			vec2 v = translation + attrPosition * scale;
+// 		vec4 screenTransform = 
+// 			vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
+// 		gl_Position =
+// 			vec4(v * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
 
-	const meshFragmentShader = `
-		precision mediump float;
-		varying vec3 fragColor;
+// 		fragColor = color;
+// 		}
+// 	`;
 
-		void main() {
-			gl_FragColor = vec4(fragColor, 1.0);
-		}
-	`;
+// 	const meshFragmentShader = `
+// 		precision mediump float;
+// 		varying vec3 fragColor;
+
+// 		void main() {
+// 			gl_FragColor = vec4(fragColor, 1.0);
+// 		}
+// 	`;
+
+
+//webgl2
+const pointVertexShader = `#version 300 es
+    in vec2 attrPosition;
+    in vec3 attrColor;
+    uniform vec2 domainSize;
+    uniform float pointSize;
+    uniform float drawDisk;
+
+    out vec3 fragColor;
+    out float fragDrawDisk;
+
+    void main() {
+        vec4 screenTransform = vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
+        gl_Position = vec4(attrPosition * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
+
+        gl_PointSize = pointSize;
+        fragColor = attrColor;
+        fragDrawDisk = drawDisk;
+    }
+`;
+
+const pointFragmentShader = `#version 300 es
+    precision mediump float;
+    in vec3 fragColor;
+    in float fragDrawDisk;
+    out vec4 fragOutput;
+
+    void main() {
+        if (fragDrawDisk == 1.0) {
+            float rx = 0.5 - gl_PointCoord.x;
+            float ry = 0.5 - gl_PointCoord.y;
+            float r2 = rx * rx + ry * ry;
+            if (r2 > 0.25)
+                discard;
+        }
+        fragOutput = vec4(fragColor, 1.0);
+    }
+`;
+
+const meshVertexShader = `#version 300 es
+    in vec2 attrPosition;
+    uniform vec2 domainSize;
+    uniform vec3 color;
+    uniform vec2 translation;
+    uniform float scale;
+    out vec3 fragColor;
+
+    void main() {
+        vec2 v = translation + attrPosition * scale;
+        vec4 screenTransform = vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
+        gl_Position = vec4(v * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
+
+        fragColor = color;
+    }
+`;
+
+const meshFragmentShader = `#version 300 es
+    precision mediump float;
+    in vec3 fragColor;
+    out vec4 fragOutput;
+
+    void main() {
+        fragOutput = vec4(fragColor, 1.0);
+    }
+`;
+
 
 var pointShader = null;
 var meshShader = null;
@@ -94,9 +164,9 @@ export function draw() {
 
   // prepare shaders
 
-  if (pointShader == null)
+  if (pointShader === null)
     pointShader = createShader(gl, pointVertexShader, pointFragmentShader);
-  if (meshShader == null)
+  if (meshShader === null)
     meshShader = createShader(gl, meshVertexShader, meshFragmentShader);
 
   // grid
@@ -157,7 +227,7 @@ export function draw() {
   if (scene.showParticles) {
     gl.clear(gl.DEPTH_BUFFER_BIT);
 
-    var pointSize =
+    pointSize =
       ((2.0 * scene.fluid.particleRadius) / simWidth) * canvas.width;
 
     gl.useProgram(pointShader);
@@ -175,14 +245,14 @@ export function draw() {
     gl.bindBuffer(gl.ARRAY_BUFFER, pointVertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, scene.fluid.particlePos, gl.DYNAMIC_DRAW);
 
-    var posLoc = gl.getAttribLocation(pointShader, "attrPosition");
+    posLoc = gl.getAttribLocation(pointShader, "attrPosition");
     gl.enableVertexAttribArray(posLoc);
     gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, pointColorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, scene.fluid.particleColor, gl.DYNAMIC_DRAW);
 
-    var colorLoc = gl.getAttribLocation(pointShader, "attrColor");
+    colorLoc = gl.getAttribLocation(pointShader, "attrColor");
     gl.enableVertexAttribArray(colorLoc);
     gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
 
@@ -266,7 +336,7 @@ export function draw() {
   gl.disableVertexAttribArray(posLoc);
 }
 
-export function createShader(gl, vsSource, fsSource) {
+function createShader(gl, vsSource, fsSource) {
   const vsShader = gl.createShader(gl.VERTEX_SHADER);
   gl.shaderSource(vsShader, vsSource);
   gl.compileShader(vsShader);
@@ -283,10 +353,12 @@ export function createShader(gl, vsSource, fsSource) {
       "fragment shader compile error: " + gl.getShaderInfoLog(fsShader)
     );
 
-  var shader = gl.createProgram();
-  gl.attachShader(shader, vsShader);
-  gl.attachShader(shader, fsShader);
-  gl.linkProgram(shader);
+  var program = gl.createProgram();
+  gl.attachShader(program, vsShader);
+  gl.attachShader(program, fsShader);
+  gl.linkProgram(program);
 
-  return shader;
+  return program;
 }
+
+

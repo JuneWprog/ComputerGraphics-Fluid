@@ -1,6 +1,8 @@
+#version 300 es
 precision mediump float;
-varying vec3 fragColor;
+in vec3 fragColor;
+out vec3 fragColor;
 
 void main() {
-    gl_FragColor = vec4(fragColor, 1.0);
+    fragOutput = vec4(fragColor, 1.0);
 }
