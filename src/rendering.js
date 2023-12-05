@@ -5,6 +5,7 @@ import { scene } from "./Scene.js";
 // import meshVertexShader from "./shaders/meshVertexShader.glsl";
 // import meshFragmentShader from "./shaders/meshFragmentShader.glsl";
 import { gl, canvas } from "./Canvas.js";
+
 const pointVertexShader = `
 		attribute vec2 attrPosition;
 		attribute vec3 attrColor;

@@ -1,66 +1,42 @@
 import React, { useState } from "react";
 import {EARTH_GRAVITY}  from "./Constants";
 
-export default function ParticleControls() {
-  const [showParticles, setShowParticles] = useState(true);
-  const [showGrid, setShowGrid] = useState(true);
-  const [compensateDrift, setCompensateDrift] = useState(true);
-  const [separateParticles, setSeparateParticles] = useState(true);
-  const [paused, setPaused] = useState(true);
-  const [gravity, setGravity] = useState(EARTH_GRAVITY); 
-  //TODO add gravity menu for user to select 
- 
-  const [flipRatio, setFlipRatio] = useState(9);
-
-  const handleShowParticlesChange = () => {
-    setShowParticles(!showParticles);
-  };
-
-  const handleShowGridChange = () => {
-    setShowGrid(!showGrid);
-  };
-
-  const handleCompensateDriftChange = () => {
-    setCompensateDrift(!compensateDrift);
-  };
-
-  const handleSeparateParticlesChange = () => {
-    setSeparateParticles(!separateParticles);
-  };
-
-  const handlePausedChange = () => {
-    setPaused(!paused);
-  }
-
-  const handleSliderChange = (event) => {
-    const newFlipRatio = 0.1 * event.target.value;
-    setFlipRatio(newFlipRatio);
-  };
-
-  const handleGravityChange = (event) => {
-    const newGravity = event.target.value;
-    setGravity(newGravity);
-  };
+// ParticleControls.js
+export default function ParticleControls({
+  showParticles,
+  showGrid,
+  compensateDrift,
+  separateParticles,
+  paused,
+  gravity,
+  flipRatio,
+  onPausedChange,
+  onShowParticlesChange,
+  onShowGridChange,
+  onCompensateDriftChange,
+  onSeparateParticlesChange,
+  onSliderChange,
+  onGravityChange,
+}) {
   const buttonStyle = (value) => {
     return {
-      backgroundColor: value ? "green" : "grey",
+      backgroundColor: value ? 'green' : 'grey',
     };
   };
 
-
   return (
     <div>
-       <button
+      <button
         type="button"
-        onClick={handlePausedChange}
+        onClick={onPausedChange}
         value={paused}
         style={buttonStyle(paused)}
       >
-       {paused?"Start":"Pause"}
+        {paused ? 'Start' : 'Pause'}
       </button>
       <button
         type="button"
-        onClick={handleShowParticlesChange}
+        onClick={onShowParticlesChange}
         value={showParticles}
         style={buttonStyle(showParticles)}
       >
@@ -69,7 +45,7 @@ export default function ParticleControls() {
 
       <button
         type="button"
-        onClick={handleShowGridChange}
+        onClick={onShowGridChange}
         value={showGrid}
         style={buttonStyle(showGrid)}
       >
@@ -78,7 +54,7 @@ export default function ParticleControls() {
 
       <button
         type="button"
-        onClick={handleCompensateDriftChange}
+        onClick={onCompensateDriftChange}
         value={compensateDrift}
         style={buttonStyle(compensateDrift)}
       >
@@ -87,7 +63,7 @@ export default function ParticleControls() {
 
       <button
         type="button"
-        onClick={handleSeparateParticlesChange}
+        onClick={onSeparateParticlesChange}
         value={separateParticles}
         style={buttonStyle(separateParticles)}
       >
@@ -99,10 +75,9 @@ export default function ParticleControls() {
         id="flipRatioSlider"
         min="0"
         max="10"
-        value={flipRatio * 10}
+        value={flipRatio}
         className="slider"
-        onChange={handleSliderChange}
-        
+        onChange={onSliderChange}
       />
       <label>FLIP</label>
 
@@ -114,10 +89,129 @@ export default function ParticleControls() {
         max="0"
         value={gravity}
         className="slider"
-        onChange={handleGravityChange}
-      
+        onChange={onGravityChange}
       />
       <label> {gravity}</label>
     </div>
   );
 }
+
+
+// export default function ParticleControls() {
+//   const [showParticles, setShowParticles] = useState(true);
+//   const [showGrid, setShowGrid] = useState(true);
+//   const [compensateDrift, setCompensateDrift] = useState(true);
+//   const [separateParticles, setSeparateParticles] = useState(true);
+//   const [paused, setPaused] = useState(true);
+//   const [gravity, setGravity] = useState(EARTH_GRAVITY); 
+//   const [flipRatio, setFlipRatio] = useState(9);
+
+//   const handleShowParticlesChange = () => {
+//     setShowParticles(!showParticles);
+//   };
+
+//   const handleShowGridChange = () => {
+//     setShowGrid(!showGrid);
+//   };
+
+//   const handleCompensateDriftChange = () => {
+//     setCompensateDrift(!compensateDrift);
+//   };
+
+//   const handleSeparateParticlesChange = () => {
+//     setSeparateParticles(!separateParticles);
+//   };
+
+//   const handlePausedChange = () => {
+//     setPaused(!paused);
+//   }
+
+//   const handleSliderChange = (event) => {
+//     const newFlipRatio = 0.1 * event.target.value;
+//     setFlipRatio(newFlipRatio);
+//   };
+
+//   const handleGravityChange = (event) => {
+//     const newGravity = event.target.value;
+//     setGravity(newGravity);
+//   };
+//   const buttonStyle = (value) => {
+//     return {
+//       backgroundColor: value ? "green" : "grey",
+//     };
+//   };
+
+
+//   return (
+//     <div>
+//        <button
+//         type="button"
+//         onClick={handlePausedChange}
+//         value={paused}
+//         style={buttonStyle(paused)}
+//       >
+//        {paused?"Start":"Pause"}
+//       </button>
+//       <button
+//         type="button"
+//         onClick={handleShowParticlesChange}
+//         value={showParticles}
+//         style={buttonStyle(showParticles)}
+//       >
+//         Particles
+//       </button>
+
+//       <button
+//         type="button"
+//         onClick={handleShowGridChange}
+//         value={showGrid}
+//         style={buttonStyle(showGrid)}
+//       >
+//         Grid
+//       </button>
+
+//       <button
+//         type="button"
+//         onClick={handleCompensateDriftChange}
+//         value={compensateDrift}
+//         style={buttonStyle(compensateDrift)}
+//       >
+//         Compensate Drift
+//       </button>
+
+//       <button
+//         type="button"
+//         onClick={handleSeparateParticlesChange}
+//         value={separateParticles}
+//         style={buttonStyle(separateParticles)}
+//       >
+//         Separate Particles
+//       </button>
+//       <label>PIC</label>
+//       <input
+//         type="range"
+//         id="flipRatioSlider"
+//         min="0"
+//         max="10"
+//         value={flipRatio * 10}
+//         className="slider"
+//         onChange={handleSliderChange}
+        
+//       />
+//       <label>FLIP</label>
+
+//       <label>Gravity</label>
+//       <input
+//         type="range"
+//         id="gravitySlider"
+//         min="-20"
+//         max="0"
+//         value={gravity}
+//         className="slider"
+//         onChange={handleGravityChange}
+      
+//       />
+//       <label> {gravity}</label>
+//     </div>
+//   );
+// }

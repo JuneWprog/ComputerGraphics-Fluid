@@ -13,7 +13,7 @@ export const setupCanvas = function () {
   //   gl = canvas.getContext("webgl");
   // }
   gl = canvas.getContext("webgl");
-  alert("WebGL version: " + gl.getParameter(gl.VERSION));
+  
   if (!gl) {
     console.log("WebGL not supported, falling back to experimental-webgl");
     gl = canvas.getContext("experimental-webgl");
