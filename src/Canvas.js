@@ -7,21 +7,21 @@ export const setupCanvas = function () {
     alert("Canvas not found");
     return;
   }
-  // gl = canvas.getContext("webgl2");
-  // if (!gl) {
-  //   console.log("WebGL2 not supported");
-  //   gl = canvas.getContext("webgl");
-  // }
-  gl = canvas.getContext("webgl");
+  gl = canvas.getContext("webgl2");
+  if (!gl) {
+    console.log("WebGL2 not supported");
+    gl = canvas.getContext("webgl");
+  }
+  // gl = canvas.getContext("webgl");
   
   if (!gl) {
     console.log("WebGL not supported, falling back to experimental-webgl");
     gl = canvas.getContext("experimental-webgl");
   }
+  console.log("WebGL version is",gl.getParameter(gl.VERSION));
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
-  canvas.style.border = "10px solid grey";
-
+  //canvas.style.border = "5px solid grey";
   canvas.focus();
   // Set the clear color to be purple
   gl.clearColor(1.0, 0.0, 1.0, 1.0);
