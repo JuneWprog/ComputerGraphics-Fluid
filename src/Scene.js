@@ -1,4 +1,4 @@
-import {simHeight, simWidth, EARTH_GRAVITY} from './Constants.js';
+import {cellHeight, cellWidth, EARTH_GRAVITY} from './Constants.js';
 import FluidSimulator from './FluidSimulator.js';
 import {draw} from './rendering.js';
 
@@ -40,8 +40,8 @@ class Scene {
 
 		var res = 100;
 		
-		var tankHeight = 1.0 * simHeight;
-		var tankWidth = 1.0 * simWidth;
+		var tankHeight = 1.0 * cellHeight;
+		var tankWidth = 1.0 * cellWidth;
 		var h = tankHeight / res;
 		var density = 1000.0;
 

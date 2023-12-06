@@ -7,13 +7,15 @@ import { cScale } from "./Constants";
 
 export default function App() {
   const [showParticles, setShowParticles] = useState(true);
-  const [showGrid, setShowGrid] = useState(true);
+  const [showGrid, setShowGrid] = useState(false);
   const [compensateDrift, setCompensateDrift] = useState(true);
   const [separateParticles, setSeparateParticles] = useState(true);
-  const [paused, setPaused] = useState(true);
+  const [paused, setPaused] = useState(false);
   const [gravity, setGravity] = useState(EARTH_GRAVITY);
   const [flipRatio, setFlipRatio] = useState(0.9);
   const [mouseDown, setMouseDown] = useState(false);
+  const [density, setDensity] = useState(1.0);
+
 
   // Control handlers
   const handlePausedChange = () => {
@@ -49,7 +51,6 @@ export default function App() {
   // Define event handler functions with useCallback
   const startDrag = useCallback((x, y) => {
     let bounds = canvas.getBoundingClientRect();
-
     let mx = x - bounds.left - canvas.clientLeft;
     let my = y - bounds.top - canvas.clientTop;
     setMouseDown(true);
@@ -58,7 +59,7 @@ export default function App() {
     y = (canvas.height - my) / cScale;
 
     scene.setObstacle(x, y, true);
-    scene.paused = false;
+    setPaused(false);
   }, []);
 
   const drag = useCallback(

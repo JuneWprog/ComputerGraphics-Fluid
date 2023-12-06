@@ -21,11 +21,8 @@ export const setupCanvas = function () {
   console.log("WebGL version is",gl.getParameter(gl.VERSION));
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
-  //canvas.style.border = "5px solid grey";
   canvas.focus();
-  // Set the clear color to be purple
   gl.clearColor(1.0, 0.0, 1.0, 1.0);
-  // Clear the color buffer with clear color
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   return { gl, canvas };
 };

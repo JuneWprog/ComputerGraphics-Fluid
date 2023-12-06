@@ -1,4 +1,4 @@
-import { simHeight, simWidth } from "./Constants.js";
+import { cellHeight, cellWidth } from "./Constants.js";
 import { scene } from "./Scene.js";
 // import pointVertexShader from "./shaders/pointVertexShader.glsl";
 // import pointFragmentShader from "./shaders/pointFragmentShader.glsl";
@@ -78,6 +78,10 @@ import { gl, canvas } from "./Canvas.js";
 
 
 //webgl2
+
+//draw disk is a boolean:  weather to draw the obstacle
+// in, input -> out,output, uniform -> constant
+//point shaders are used to draw particles
 const pointVertexShader = `#version 300 es
     in vec2 attrPosition;
     in vec3 attrColor;
@@ -98,6 +102,8 @@ const pointVertexShader = `#version 300 es
     }
 `;
 
+//get input from vertex shader, output to fragment shader
+
 const pointFragmentShader = `#version 300 es
     precision mediump float;
     in vec3 fragColor;
@@ -116,12 +122,16 @@ const pointFragmentShader = `#version 300 es
     }
 `;
 
+//Mesh shaders can operate on an entire mesh of vertices rather than individual vertices.
+//They are used to draw the disk/obstacle
 const meshVertexShader = `#version 300 es
     in vec2 attrPosition;
+
     uniform vec2 domainSize;
     uniform vec3 color;
     uniform vec2 translation;
     uniform float scale;
+    
     out vec3 fragColor;
 
     void main() {
@@ -169,18 +179,19 @@ export function draw() {
   if (meshShader === null)
     meshShader = createShader(gl, meshVertexShader, meshFragmentShader);
 
-  // grid
+  // grid cells
 
   if (gridVertBuffer == null) {
-    var f = scene.fluid;
+    var fluid = scene.fluid;
     gridVertBuffer = gl.createBuffer();
-    var cellCenters = new Float32Array(2 * f.fNumCells);
+    var cellCenters = new Float32Array(2 * fluid.fNumCells);
     var p = 0;
 
-    for (var i = 0; i < f.fNumX; i++) {
-      for (var j = 0; j < f.fNumY; j++) {
-        cellCenters[p++] = (i + 0.5) * f.h;
-        cellCenters[p++] = (j + 0.5) * f.h;
+    //find the center of each cell
+    for (var i = 0; i < fluid.fNumX; i++) {
+      for (var j = 0; j < fluid.fNumY; j++) {
+        cellCenters[p++] = (i + 0.5) * fluid.h;
+        cellCenters[p++] = (j + 0.5) * fluid.h;
       }
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, gridVertBuffer);
@@ -191,15 +202,17 @@ export function draw() {
   if (gridColorBuffer == null) gridColorBuffer = gl.createBuffer();
 
   if (scene.showGrid) {
-    var pointSize = ((0.9 * scene.fluid.h) / simWidth) * canvas.width;
+    //leave 0.1 space on the sides
+    var pointSize = ((0.9 * scene.fluid.h) / cellWidth) * canvas.width;
 
     gl.useProgram(pointShader);
     gl.uniform2f(
       gl.getUniformLocation(pointShader, "domainSize"),
-      simWidth,
-      simHeight
+      cellWidth,
+      cellHeight
     );
     gl.uniform1f(gl.getUniformLocation(pointShader, "pointSize"), pointSize);
+    //draw little squares
     gl.uniform1f(gl.getUniformLocation(pointShader, "drawDisk"), 0.0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, gridVertBuffer);
@@ -222,21 +235,22 @@ export function draw() {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
-  // water
+  // water/particles
 
   if (scene.showParticles) {
     gl.clear(gl.DEPTH_BUFFER_BIT);
 
     pointSize =
-      ((2.0 * scene.fluid.particleRadius) / simWidth) * canvas.width;
+      ((2.0 * scene.fluid.particleRadius) / cellWidth) * canvas.width;
 
     gl.useProgram(pointShader);
     gl.uniform2f(
       gl.getUniformLocation(pointShader, "domainSize"),
-      simWidth,
-      simHeight
+      cellWidth,
+      cellHeight
     );
     gl.uniform1f(gl.getUniformLocation(pointShader, "pointSize"), pointSize);
+    //draw little circles
     gl.uniform1f(gl.getUniformLocation(pointShader, "drawDisk"), 1.0);
 
     if (pointVertexBuffer == null) pointVertexBuffer = gl.createBuffer();
@@ -264,11 +278,11 @@ export function draw() {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
-  // disk
-
+  // draw disk ->obstacle
   // prepare disk mesh
 
-  var numSegs = 50;
+  //controls the shape of the obstacle
+  var numSegs =50;
 
   if (diskVertBuffer == null) {
     diskVertBuffer = gl.createBuffer();
@@ -301,13 +315,14 @@ export function draw() {
 
   gl.clear(gl.DEPTH_BUFFER_BIT);
 
-  var diskColor = [1.0, 0.0, 0.0];
+  //color of ball
+  var diskColor = [0.0, 1.0, 0];
 
   gl.useProgram(meshShader);
   gl.uniform2f(
     gl.getUniformLocation(meshShader, "domainSize"),
-    simWidth,
-    simHeight
+    cellWidth,
+    cellHeight
   );
   gl.uniform3f(
     gl.getUniformLocation(meshShader, "color"),
@@ -315,6 +330,7 @@ export function draw() {
     diskColor[1],
     diskColor[2]
   );
+  
   gl.uniform2f(
     gl.getUniformLocation(meshShader, "translation"),
     scene.obstacleX,

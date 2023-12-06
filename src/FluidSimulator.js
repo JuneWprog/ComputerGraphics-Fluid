@@ -7,16 +7,13 @@ export class FluidSimulator {
     constructor(density, width, height, spacing, particleRadius, maxParticles) {
 
         // fluid
-
         this.density = density;
         //number of cells in x and y direction
-
         this.fNumX = Math.floor(width / spacing) + 1;
         this.fNumY = Math.floor(height / spacing) + 1;
         this.h = Math.max(width / this.fNumX, height / this.fNumY);
         this.fInvSpacing = 1.0 / this.h;
         this.fNumCells = this.fNumX * this.fNumY;
-
         this.u = new Float32Array(this.fNumCells);
         this.v = new Float32Array(this.fNumCells);
         this.du = new Float32Array(this.fNumCells);
