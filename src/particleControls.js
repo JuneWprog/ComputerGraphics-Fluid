@@ -100,6 +100,7 @@ export default function ParticleControls({
           value={density}
           className="slider"
           onChange={onDensityChange}
+          style={{ width: "5px" }}
         />
       <label> {density}</label>
     </div>
