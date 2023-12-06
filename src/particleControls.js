@@ -15,6 +15,8 @@ export default function ParticleControls({
   onSeparateParticlesChange,
   onSliderChange,
   onGravityChange,
+  density,
+  onDensityChange,
 }) {
   const buttonStyle = (value) => {
     return {
@@ -90,6 +92,16 @@ export default function ParticleControls({
         onChange={onGravityChange}
       />
       <label> {gravity}</label>
+
+      <label>Density</label>
+        <input
+          type="number"
+          id = "densitySlider"
+          value={density}
+          className="slider"
+          onChange={onDensityChange}
+        />
+      <label> {density}</label>
     </div>
   );
 }

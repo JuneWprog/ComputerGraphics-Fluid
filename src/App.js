@@ -14,6 +14,7 @@ export default function App() {
   const [gravity, setGravity] = useState(EARTH_GRAVITY);
   const [flipRatio, setFlipRatio] = useState(0.9);
   const [mouseDown, setMouseDown] = useState(false);
+  const [density, setDensity] = useState(1000);
 
   // Control handlers
   const handlePausedChange = () => {
@@ -44,6 +45,11 @@ export default function App() {
   const handleGravityChange = (event) => {
     const newGravity = event.target.value;
     setGravity(newGravity);
+  };
+
+  const handleDensityChange = (event) => {
+    const newDensity = event.target.value;
+    setDensity(newDensity);
   };
 
   // Define event handler functions with useCallback
@@ -201,6 +207,7 @@ export default function App() {
           paused={paused}
           gravity={gravity}
           flipRatio={flipRatio}
+          density={density}
           onPausedChange={handlePausedChange}
           onShowParticlesChange={handleShowParticlesChange}
           onShowGridChange={handleShowGridChange}
@@ -208,9 +215,9 @@ export default function App() {
           onSeparateParticlesChange={handleSeparateParticlesChange}
           onSliderChange={handleSliderChange}
           onGravityChange={handleGravityChange}
-        />
+          onDensityChange={handleDensityChange} />
         <canvas id="myCanvas" />
       </body>
-    </div>
+    </div>   
   );
 }
