@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+# Fluid Simulation Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Group 3
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This project is a computer graphics implementation of a fluid simulation. It uses WebGL for rendering and simulation, providing a visually appealing representation of fluid dynamics.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Real-time fluid simulation with particle-based representation
+- Visualization of fluid grid and particles
+- Interactive controls for adjusting simulation parameters
+- Obstacle handling for dynamic interactions
+- Mesh rendering for obstacles and fluid boundaries
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies Used
 
-### `npm test`
+- WebGL for real-time rendering
+- JavaScript for simulation and interaction logic
+- React component and CSS for the user interface
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup
 
-### `npm run build`
+1. Clone the repository:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    ```bash
+    git repo clone https://github.com/JuneWprog/ComputerGraphics-Fluid
+    cd ComputerGraphics-Fluid
+    npm install
+    npm start
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Open `index.html` in a modern web browser (ensure WebGL support).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Interact with the simulation using the provided controls.
 
-### `npm run eject`
+## Controls
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Use the mouse to interact with the fluid simulation:
+  - **Mouse** drag the obstacle to manipulate fluid
+ 
+- Keyboard shortcuts:
+  - **P:** Pause simulation
+  - **S:** Start simulation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Simulation Parameters
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Adjust the following parameters in the user interface:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Show Particles:** Toggle visibility of fluid particles.
+- **Show Grid:** Toggle visibility of fluid grid.
+- **Compensate Drift:** Compensate for numerical drift in the simulation.
+- **Separate Particles:** Control the separation of fluid particles.
+- **Gravity:** Adjust the strength of gravity affecting the fluid.
+- **Flip Ratio:** Control the ratio of FLIP (Fluid-Implicit-Particle) to PIC (Particle-In-Cell) method.
 
-## Learn More
+## Contributing
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Feel free to contribute to the project by opening issues or submitting pull requests. For major changes, please open an issue first to discuss the proposed changes.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Acknowledgments

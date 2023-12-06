@@ -48,6 +48,11 @@ export default function App() {
     setGravity(newGravity);
   };
 
+  const handleDensityChange = (event) => {
+    const newDensity = event.target.value;
+    setDensity(newDensity);
+  };
+
   // Define event handler functions with useCallback
   const startDrag = useCallback((x, y) => {
     let bounds = canvas.getBoundingClientRect();
@@ -202,6 +207,7 @@ export default function App() {
           paused={paused}
           gravity={gravity}
           flipRatio={flipRatio}
+          density={density}
           onPausedChange={handlePausedChange}
           onShowParticlesChange={handleShowParticlesChange}
           onShowGridChange={handleShowGridChange}
@@ -209,9 +215,9 @@ export default function App() {
           onSeparateParticlesChange={handleSeparateParticlesChange}
           onSliderChange={handleSliderChange}
           onGravityChange={handleGravityChange}
-        />
+          onDensityChange={handleDensityChange} />
         <canvas id="myCanvas" />
       </body>
-    </div>
+    </div>   
   );
 }
