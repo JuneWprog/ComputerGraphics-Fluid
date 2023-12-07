@@ -1,10 +1,10 @@
-import { cellHeight, cellWidth } from "./Constants.js";
-import { scene } from "./Scene.js";
+import { cellHeight, cellWidth } from "./Constants";
+import { scene } from "./Scene";
 // import pointVertexShader from "./shaders/pointVertexShader.glsl";
 // import pointFragmentShader from "./shaders/pointFragmentShader.glsl";
 // import meshVertexShader from "./shaders/meshVertexShader.glsl";
 // import meshFragmentShader from "./shaders/meshFragmentShader.glsl";
-import { gl, canvas } from "./Canvas.js";
+import { gl, canvas } from "./Canvas";
 
 
 //webgl1

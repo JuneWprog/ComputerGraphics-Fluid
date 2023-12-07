@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import ParticleControls from "./particleControls";
-import { scene } from "./Scene";
-import { EARTH_GRAVITY } from "./Constants";
-import { canvas, setupCanvas } from "./Canvas";
-import { cScale } from "./Constants";
+import ParticleControls from "./components/particleControls";
+import { scene } from "./components/Scene";
+import { EARTH_GRAVITY } from "./components/Constants";
+import { canvas, setupCanvas } from "./components/Canvas";
+import { cScale } from "./components/Constants";
 
 export default function App() {
   const [showParticles, setShowParticles] = useState(true);

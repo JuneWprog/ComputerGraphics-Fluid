@@ -1,6 +1,6 @@
-import { clamp } from './utils.js';
-import { scene } from './Scene.js';
-import  {FLUID_CELL, AIR_CELL, SOLID_CELL } from './Constants.js';
+import { clamp } from './utils';
+import { scene } from './Scene';
+import  {FLUID_CELL, AIR_CELL, SOLID_CELL } from './Constants';
 
 
 export class FluidSimulator {

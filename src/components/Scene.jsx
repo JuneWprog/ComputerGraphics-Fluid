@@ -1,6 +1,6 @@
-import { cellHeight, cellWidth, EARTH_GRAVITY } from "./Constants.js";
-import FluidSimulator from "./FluidSimulator.js";
-import { draw } from "./rendering.js";
+import { cellHeight, cellWidth, EARTH_GRAVITY } from "./Constants";
+import FluidSimulator from "./FluidSimulator";
+import { draw } from "./rendering";
 
 class Scene {
   constructor() {
