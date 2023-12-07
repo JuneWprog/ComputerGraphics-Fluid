@@ -1,4 +1,5 @@
 import React from "react";
+import { Input } from "reactstrap";
 
 export default function ParticleControls({
   showParticles,
@@ -20,7 +21,7 @@ export default function ParticleControls({
 }) {
   const buttonStyle = (value) => {
     return {
-      backgroundColor: value ? 'green' : 'grey',
+      backgroundColor: value ? "green" : "grey",
     };
   };
 
@@ -31,14 +32,16 @@ export default function ParticleControls({
         onClick={onPausedChange}
         value={paused}
         style={buttonStyle(paused)}
+        title={paused ? "Resume simulation" : "Pause simulation"}
       >
-        {paused ? 'Start' : 'Pause'}
+        {paused ? "Start" : "Pause"}
       </button>
       <button
         type="button"
         onClick={onShowParticlesChange}
         value={showParticles}
         style={buttonStyle(showParticles)}
+        title="Toggle visibility of fluid particles."
       >
         Particles
       </button>
@@ -48,6 +51,7 @@ export default function ParticleControls({
         onClick={onShowGridChange}
         value={showGrid}
         style={buttonStyle(showGrid)}
+        title="Toggle visibility of fluid grid."
       >
         Grid
       </button>
@@ -57,6 +61,7 @@ export default function ParticleControls({
         onClick={onCompensateDriftChange}
         value={compensateDrift}
         style={buttonStyle(compensateDrift)}
+        title="Compensate for numerical drift in the simulation."
       >
         Compensate Drift
       </button>
@@ -66,22 +71,29 @@ export default function ParticleControls({
         onClick={onSeparateParticlesChange}
         value={separateParticles}
         style={buttonStyle(separateParticles)}
+        title="Control the separation of fluid particles."
       >
         Separate Particles
       </button>
-      <label>PIC</label>
+      <label title="Control the ratio of FLIP (Fluid-Implicit-Particle) to PIC (Particle-In-Cell) method.">
+        PIC
+      </label>
       <input
         type="range"
         id="flipRatioSlider"
         min="0"
         max="10"
-        value={flipRatio*10}
+        value={flipRatio * 10}
         className="slider"
         onChange={onSliderChange}
       />
-      <label>FLIP</label>
+      <label title="Control the ratio of FLIP (Fluid-Implicit-Particle) to PIC (Particle-In-Cell) method.">
+        FLIP
+      </label>
 
-      <label>Gravity</label>
+      <label title="Adjust the strength of gravity affecting the fluid.">
+        Gravity
+      </label>
       <input
         type="range"
         id="gravitySlider"
@@ -94,14 +106,15 @@ export default function ParticleControls({
       <label> {gravity}</label>
 
       <label>Density</label>
-        <input
-          type="number"
-          id = "densitySlider"
-          value={density}
-          className="slider"
-          onChange={onDensityChange}
-          style={{ width: "5px" }}
-        />
+      <Input
+        type="number"
+        id="densitySlider"
+        value={density}
+        className="slider"
+        onChange={onDensityChange}
+        style={{ width: "8px", margin: "0" }}
+        min="0"
+      />
       <label> {density}</label>
     </div>
   );

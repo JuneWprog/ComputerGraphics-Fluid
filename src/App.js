@@ -16,7 +16,6 @@ export default function App() {
   const [mouseDown, setMouseDown] = useState(false);
   const [density, setDensity] = useState(1.0);
 
-
   // Control handlers
   const handlePausedChange = () => {
     setPaused(!paused);
@@ -194,11 +193,11 @@ export default function App() {
   ]);
 
   return (
-    <div className="App">
+    <div className="App" style={{ boxSizing: "content-box" }}>
       <header className="App-header">
         <h3>Fluid Simulator</h3>
       </header>
-      <body className="App-body">
+      <body className="App-body" style={{ overflow: "hidden" }}>
         <ParticleControls
           showParticles={showParticles}
           showGrid={showGrid}
@@ -215,9 +214,13 @@ export default function App() {
           onSeparateParticlesChange={handleSeparateParticlesChange}
           onSliderChange={handleSliderChange}
           onGravityChange={handleGravityChange}
-          onDensityChange={handleDensityChange} />
-        <canvas id="myCanvas" />
+          onDensityChange={handleDensityChange}
+        />
+        <canvas
+          id="myCanvas"
+          style={{ height: "80vh", boxSizing: "content-box", width: "100%" }}
+        />
       </body>
-    </div>   
+    </div>
   );
 }
