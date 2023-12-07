@@ -16,6 +16,7 @@ export default function App() {
   const [flipRatio, setFlipRatio] = useState(0.9);
   const [mouseDown, setMouseDown] = useState(false);
   const [density, setDensity] = useState(1.0);
+  const [obstacleRadius, setObstacleRadius] = useState(0.15);
 
   // Control handlers
   const handlePausedChange = () => {
@@ -55,6 +56,12 @@ export default function App() {
 
   const handleRefreshClick = useCallback(() => {
     window.location.reload();
+  }, []);
+
+  const handleObstacleRadiusChange = useCallback((event) => {
+    const newRadius = parseFloat(event.target.value);
+    setObstacleRadius(newRadius);
+    scene.setObstacleRadius(newRadius);
   }, []);
 
   // Define event handler functions with useCallback
@@ -212,6 +219,7 @@ export default function App() {
           gravity={gravity}
           flipRatio={flipRatio}
           density={density}
+          obstacleRadius={obstacleRadius}
           onPausedChange={handlePausedChange}
           onShowParticlesChange={handleShowParticlesChange}
           onShowGridChange={handleShowGridChange}
@@ -220,6 +228,7 @@ export default function App() {
           onSliderChange={handleSliderChange}
           onGravityChange={handleGravityChange}
           onDensityChange={handleDensityChange}
+          onObstacleRadiusChange={handleObstacleRadiusChange}
         />
         <canvas
           id="myCanvas"

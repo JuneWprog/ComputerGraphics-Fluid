@@ -18,6 +18,8 @@ export default function ParticleControls({
   onGravityChange,
   density,
   onDensityChange,
+  obstacleRadius,
+  onObstacleRadiusChange,
 }) {
   const buttonStyle = (value) => {
     return {
@@ -106,7 +108,7 @@ export default function ParticleControls({
       <label> {gravity}</label>
 
       <label>Density</label>
-      <Input
+      <input
         type="number"
         id="densitySlider"
         value={density}
@@ -116,6 +118,19 @@ export default function ParticleControls({
         min="0"
       />
       <label> {density}</label>
+
+      <label> Obstacle Radius </label>
+      <input
+        type="range"
+        id="obstacleRadiusSlider"
+        min="0"
+        max="0.5"
+        step="0.01"
+        value={obstacleRadius}
+        className="slider"
+        onChange={onObstacleRadiusChange}
+      />
+      <label> {obstacleRadius}</label>
     </div>
   );
 }

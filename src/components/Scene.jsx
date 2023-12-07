@@ -31,6 +31,7 @@ class Scene {
 
   setupScene() {
     this.obstacleRadius = 0.15;
+
     this.overRelaxation = 1.9;
 
     this.dt = 1.0 / 60.0;
@@ -153,6 +154,10 @@ class Scene {
       );
     this.frameNr++;
   }
+  setObstacleRadius(radius) {
+    this.obstacleRadius = radius;
+  }
+  
   update() {
     this.simulate();
     draw();
