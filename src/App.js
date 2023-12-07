@@ -4,6 +4,7 @@ import { scene } from "./components/Scene";
 import { EARTH_GRAVITY } from "./components/Constants";
 import { canvas, setupCanvas } from "./components/Canvas";
 import { cScale } from "./components/Constants";
+import './style/App.css';
 
 export default function App() {
   const [showParticles, setShowParticles] = useState(true);
@@ -51,6 +52,10 @@ export default function App() {
     const newDensity = event.target.value;
     setDensity(newDensity);
   };
+
+  const handleRefreshClick = useCallback(() => {
+    window.location.reload();
+  }, []);
 
   // Define event handler functions with useCallback
   const startDrag = useCallback((x, y) => {
@@ -221,6 +226,7 @@ export default function App() {
           style={{ height: "80vh", boxSizing: "content-box", width: "100%" }}
         />
       </body>
+      <button onClick={handleRefreshClick} className="refreshButton">Refresh</button>
     </div>
   );
 }
