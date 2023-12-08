@@ -1,13 +1,15 @@
-import { cellHeight, cellWidth, EARTH_GRAVITY } from "./Constants";
+import {CELL_HEIGHT,CELL_WIDTH, EARTH_GRAVITY, WATER_DENSITY } from "./Constants";
 import FluidSimulator from "./FluidSimulator";
 import { draw } from "./rendering";
 
+//The scene class is used to setup the scene
+// draw the scene and update the scene
 class Scene {
   constructor() {
     this.gravity = EARTH_GRAVITY;
-    this.dt = 1.0 / 120.0;
+    this.dt = 1.0 / 60.0;
     this.flipRatio = 0.9;
-    this.numPressureIters = 100;
+    this.numPressureIters = 50; 
     this.numParticleIters = 2;
     this.frameNr = 0;
     this.overRelaxation = 1.9;
@@ -30,41 +32,29 @@ class Scene {
   }
 
   setupScene() {
-    this.obstacleRadius = 0.15;
-
-    this.overRelaxation = 1.9;
-
-    this.dt = 1.0 / 60.0;
-    this.numPressureIters = 50;
-    this.numParticleIters = 2;
-
-    var res = 100;
-
-    var tankHeight = 1.0 * cellHeight;
-    var tankWidth = 1.0 * cellWidth;
-    var h = tankHeight / res;
-    var density = 1000.0;
-
-    var relWaterHeight = 0.8;
-    var relWaterWidth = 0.6;
+    const res = 100;
+    const tankHeight = 1.0 * CELL_HEIGHT;
+    const tankWidth = 1.0 * CELL_WIDTH;
+    const h = tankHeight / res;
+    const density = WATER_DENSITY;
+    const relWaterHeight = 0.8;
+    const relWaterWidth = 0.7;
 
     // dam break
 
-    // compute number of particles
+    let r = 0.3 * h; 
+    let dx = 2.0 * r;
+    let dy = (Math.sqrt(3.0) / 2.0) * dx;
 
-    var r = 0.3 * h; // particle radius w.r.t. cell size
-    var dx = 2.0 * r;
-    var dy = (Math.sqrt(3.0) / 2.0) * dx;
-
-    var numX = Math.floor((relWaterWidth * tankWidth - 2.0 * h - 2.0 * r) / dx);
-    var numY = Math.floor(
+    const numX = Math.floor((relWaterWidth * tankWidth - 2.0 * h - 2.0 * r) / dx);
+    const numY = Math.floor(
       (relWaterHeight * tankHeight - 2.0 * h - 2.0 * r) / dy
     );
-    var maxParticles = numX * numY;
+    let maxParticles = numX * numY;
 
     // create fluid
 
-    var f = (this.fluid = new FluidSimulator(
+    let f = (this.fluid = new FluidSimulator(
       density,
       tankWidth,
       tankHeight,
@@ -76,31 +66,31 @@ class Scene {
     // create particles
 
     f.numParticles = numX * numY;
-    var p = 0;
-    for (var i = 0; i < numX; i++) {
-      for (var j = 0; j < numY; j++) {
-        f.particlePos[p++] = h + r + dx * i + (j % 2 == 0 ? 0.0 : r);
+    let p = 0;
+    for (let i = 0; i < numX; i++) {
+      for (let j = 0; j < numY; j++) {
+        f.particlePos[p++] = h + r + dx * i + (j % 2 === 0 ? 0.0 : r);
         f.particlePos[p++] = h + r + dy * j;
       }
     }
 
     // setup grid cells for tank
 
-    var n = f.fNumY;
+    let n = f.fNumY;
 
-    for (var i = 0; i < f.fNumX; i++) {
-      for (var j = 0; j < f.fNumY; j++) {
-        var s = 1.0; // fluid
-        if (i == 0 || i == f.fNumX - 1 || j == 0) s = 0.0; // solid
+    for (let i = 0; i < f.fNumX; i++) {
+      for (let j = 0; j < f.fNumY; j++) {
+        let s = 1.0; 
+        if (i === 0 || i === f.fNumX - 1 || j === 0) s = 0.0; 
         f.s[i * n + j] = s;
       }
     }
-    this.setObstacle(3.0, 2.0, true);
+    this.setObstacle(2.0, 2.0, true);
   }
 
   setObstacle(x, y, reset) {
-    var vx = 0.0;
-    var vy = 0.0;
+    let vx = 0.0;
+    let vy = 0.0;
 
     if (!reset) {
       vx = (x - this.obstacleX) / this.dt;
@@ -109,17 +99,15 @@ class Scene {
 
     this.obstacleX = x;
     this.obstacleY = y;
-    var r = this.obstacleRadius;
-    var f = this.fluid;
-    var n = f.numY;
-    var cd = Math.sqrt(2) * f.h;
+    let r = this.obstacleRadius;
+    let f = this.fluid;
+    let n = f.numY;
 
-    for (var i = 1; i < f.numX - 2; i++) {
-      for (var j = 1; j < f.numY - 2; j++) {
+    for (let i = 1; i < f.numX - 2; i++) {
+      for (let j = 1; j < f.numY - 2; j++) {
         f.s[i * n + j] = 1.0;
 
-        var dx = (i + 0.5) * f.h - x;
-        var dy = (j + 0.5) * f.h - y;
+        let [dx, dy] = [(i + 0.5) * f.h - x, (j + 0.5) * f.h - y];
 
         if (dx * dx + dy * dy < r * r) {
           f.s[i * n + j] = 0.0;
@@ -158,11 +146,11 @@ class Scene {
     this.obstacleRadius = radius;
   }
   
-  update() {
+  update = () => {
     this.simulate();
     draw();
     requestAnimationFrame(this.update);
-  }
+}
 }
 
 export const scene = new Scene();

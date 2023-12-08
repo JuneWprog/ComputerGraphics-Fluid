@@ -1,85 +1,9 @@
-import { cellHeight, cellWidth } from "./Constants";
+import { CELL_HEIGHT, CELL_WIDTH } from "./Constants";
 import { scene } from "./Scene";
-// import pointVertexShader from "./shaders/pointVertexShader.glsl";
-// import pointFragmentShader from "./shaders/pointFragmentShader.glsl";
-// import meshVertexShader from "./shaders/meshVertexShader.glsl";
-// import meshFragmentShader from "./shaders/meshFragmentShader.glsl";
 import { gl, canvas } from "./Canvas";
 
-
-//webgl1
-// const pointVertexShader = `
-// 		attribute vec2 attrPosition;
-// 		attribute vec3 attrColor;
-// 		uniform vec2 domainSize;
-// 		uniform float pointSize;
-// 		uniform float drawDisk;
-
-// 		varying vec3 fragColor;
-// 		varying float fragDrawDisk;
-
-// 		void main() {
-// 		vec4 screenTransform = 
-// 			vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
-// 		gl_Position =
-// 			vec4(attrPosition * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
-
-// 		gl_PointSize = pointSize;
-// 		fragColor = attrColor;
-// 		fragDrawDisk = drawDisk;
-// 		}
-// 	`;
-
-// 	const pointFragmentShader = `
-// 		precision mediump float;
-// 		varying vec3 fragColor;
-// 		varying float fragDrawDisk;
-
-// 		void main() {
-// 			if (fragDrawDisk == 1.0) {
-// 				float rx = 0.5 - gl_PointCoord.x;
-// 				float ry = 0.5 - gl_PointCoord.y;
-// 				float r2 = rx * rx + ry * ry;
-// 				if (r2 > 0.25)
-// 					discard;
-// 			}
-// 			gl_FragColor = vec4(fragColor, 1.0);
-// 		}
-// 	`;
-
-// 	const meshVertexShader = `
-// 		attribute vec2 attrPosition;
-// 		uniform vec2 domainSize;
-// 		uniform vec3 color;
-// 		uniform vec2 translation;
-// 		uniform float scale;
-
-// 		varying vec3 fragColor;
-
-// 		void main() {
-// 			vec2 v = translation + attrPosition * scale;
-// 		vec4 screenTransform = 
-// 			vec4(2.0 / domainSize.x, 2.0 / domainSize.y, -1.0, -1.0);
-// 		gl_Position =
-// 			vec4(v * screenTransform.xy + screenTransform.zw, 0.0, 1.0);
-
-// 		fragColor = color;
-// 		}
-// 	`;
-
-// 	const meshFragmentShader = `
-// 		precision mediump float;
-// 		varying vec3 fragColor;
-
-// 		void main() {
-// 			gl_FragColor = vec4(fragColor, 1.0);
-// 		}
-// 	`;
-
-
-//webgl2
-
-//draw disk is a boolean:  weather to draw the obstacle
+//webgl2 shaders
+//draw disk-> draw circle
 // in, input -> out,output, uniform -> constant
 //point shaders are used to draw particles
 const pointVertexShader = `#version 300 es
@@ -122,7 +46,8 @@ const pointFragmentShader = `#version 300 es
     }
 `;
 
-//Mesh shaders can operate on an entire mesh of vertices rather than individual vertices.
+//Mesh shaders can operate on an entire mesh of vertices 
+//rather than individual vertices.
 //They are used to draw the disk/obstacle
 const meshVertexShader = `#version 300 es
     in vec2 attrPosition;
@@ -169,18 +94,16 @@ var diskIdBuffer = null;
 export function draw() {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
-
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   // prepare shaders
 
   if (pointShader === null)
-    pointShader = createShader(gl, pointVertexShader, pointFragmentShader);
+    pointShader = buildProgram(gl, pointVertexShader, pointFragmentShader);
   if (meshShader === null)
-    meshShader = createShader(gl, meshVertexShader, meshFragmentShader);
+    meshShader = buildProgram(gl, meshVertexShader, meshFragmentShader);
 
   // grid cells
-
   if (gridVertBuffer == null) {
     var fluid = scene.fluid;
     gridVertBuffer = gl.createBuffer();
@@ -203,13 +126,13 @@ export function draw() {
 
   if (scene.showGrid) {
     //leave 0.1 space on the sides
-    var pointSize = ((0.9 * scene.fluid.h) / cellWidth) * canvas.width;
+    var pointSize = ((0.9 * scene.fluid.h) / CELL_WIDTH) * canvas.width;
 
     gl.useProgram(pointShader);
     gl.uniform2f(
       gl.getUniformLocation(pointShader, "domainSize"),
-      cellWidth,
-      cellHeight
+      CELL_WIDTH,
+      CELL_HEIGHT
     );
     gl.uniform1f(gl.getUniformLocation(pointShader, "pointSize"), pointSize);
     //draw little squares
@@ -235,19 +158,19 @@ export function draw() {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
-  // water/particles
+  // draw water/particles
 
   if (scene.showParticles) {
     gl.clear(gl.DEPTH_BUFFER_BIT);
 
     pointSize =
-      ((2.0 * scene.fluid.particleRadius) / cellWidth) * canvas.width;
+      ((2.0 * scene.fluid.particleRadius) / CELL_WIDTH) * canvas.width;
 
     gl.useProgram(pointShader);
     gl.uniform2f(
       gl.getUniformLocation(pointShader, "domainSize"),
-      cellWidth,
-      cellHeight
+      CELL_WIDTH,
+      CELL_HEIGHT
     );
     gl.uniform1f(gl.getUniformLocation(pointShader, "pointSize"), pointSize);
     //draw little circles
@@ -316,13 +239,13 @@ export function draw() {
   gl.clear(gl.DEPTH_BUFFER_BIT);
 
   //color of ball
-  var diskColor = [0.0, 1.0, 0];
+  var diskColor = [1.0, 1.0, 0];
 
   gl.useProgram(meshShader);
   gl.uniform2f(
     gl.getUniformLocation(meshShader, "domainSize"),
-    cellWidth,
-    cellHeight
+    CELL_WIDTH,
+    CELL_HEIGHT
   );
   gl.uniform3f(
     gl.getUniformLocation(meshShader, "color"),
@@ -345,14 +268,12 @@ export function draw() {
   gl.enableVertexAttribArray(posLoc);
   gl.bindBuffer(gl.ARRAY_BUFFER, diskVertBuffer);
   gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, diskIdBuffer);
   gl.drawElements(gl.TRIANGLES, 3 * numSegs, gl.UNSIGNED_SHORT, 0);
-
   gl.disableVertexAttribArray(posLoc);
 }
 
-function createShader(gl, vsSource, fsSource) {
+function buildProgram(gl, vsSource, fsSource) {
   const vsShader = gl.createShader(gl.VERTEX_SHADER);
   gl.shaderSource(vsShader, vsSource);
   gl.compileShader(vsShader);

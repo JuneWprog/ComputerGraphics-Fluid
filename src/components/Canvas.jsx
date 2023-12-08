@@ -1,3 +1,5 @@
+//It is used to setup the canvas and WebGL context at initialization --run once on mount
+//It get the canvas element and WebGL context and set the canvas width and height
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./Constants";
 export let gl;
 export let canvas;

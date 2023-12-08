@@ -3,7 +3,7 @@ import ParticleControls from "./components/particleControls";
 import { scene } from "./components/Scene";
 import { EARTH_GRAVITY } from "./components/Constants";
 import { canvas, setupCanvas } from "./components/Canvas";
-import { cScale } from "./components/Constants";
+import { SCALE } from "./components/Constants";
 import './style/App.css';
 
 export default function App() {
@@ -11,9 +11,9 @@ export default function App() {
   const [showGrid, setShowGrid] = useState(false);
   const [compensateDrift, setCompensateDrift] = useState(true);
   const [separateParticles, setSeparateParticles] = useState(true);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
   const [gravity, setGravity] = useState(EARTH_GRAVITY);
-  const [flipRatio, setFlipRatio] = useState(0.9);
+  const [flipRatio, setFlipRatio] = useState(0.93);
   const [mouseDown, setMouseDown] = useState(false);
   const [density, setDensity] = useState(1.0);
   const [obstacleRadius, setObstacleRadius] = useState(0.15);
@@ -71,8 +71,8 @@ export default function App() {
     let my = y - bounds.top - canvas.clientTop;
     setMouseDown(true);
 
-    x = mx / cScale;
-    y = (canvas.height - my) / cScale;
+    x = mx / SCALE;
+    y = (canvas.height - my) / SCALE;
 
     scene.setObstacle(x, y, true);
     setPaused(false);
@@ -84,8 +84,8 @@ export default function App() {
         let bounds = canvas.getBoundingClientRect();
         let mx = x - bounds.left - canvas.clientLeft;
         let my = y - bounds.top - canvas.clientTop;
-        x = mx / cScale;
-        y = (canvas.height - my) / cScale;
+        x = mx / SCALE;
+        y = (canvas.height - my) / SCALE;
         scene.setObstacle(x, y, false);
       }
     },
